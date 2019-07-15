@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
 const express = require('express');
 const genreRouter = require('./routes/genres');
+const customerRouter = require('./routes/customers');
 
 
 mongoose.connect('mongodb://localhost/Vidly')
@@ -12,6 +13,7 @@ mongoose.connect('mongodb://localhost/Vidly')
 const app = express();
 app.use(express.json());
 app.use('/api/genres/', genreRouter);
+app.use('/api/customers', customerRouter);
 
 const PORT = process.env.PORT || 3000;
 
