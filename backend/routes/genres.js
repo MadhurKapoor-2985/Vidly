@@ -1,21 +1,6 @@
 const express = require('express');
-const Joi = require('@hapi/joi');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-const genreSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 50
-    }
-});
-
-const Genre = mongoose.model('Genre', genreSchema);
-
-
+const {Genre, validate} = require('../models/genre');
 
 router.get('/', async (req, res) => {
     const genres = await Genre.find({});
@@ -39,7 +24,7 @@ router.post('/', async (req, res) => {
 
     const {
         error
-    } = validateRequest(req.body);
+    } = validate(req.body);
     if (error) {
         return res.status(400).send(error);
     }
@@ -59,7 +44,7 @@ router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const {
         error
-    } = validateRequest(req.body);
+    } = validate(req.body);
     if (error) {
         return res.status(400).send(error);
     }
@@ -93,14 +78,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-
-function validateRequest(genre) {
-    const schema = Joi.object().keys({
-        name: Joi.string().min(3).required()
-    });
-
-    return Joi.validate(genre, schema);
-
-
-}

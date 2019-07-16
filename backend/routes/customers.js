@@ -1,27 +1,6 @@
 const express = require('express');
-const Joi = require('@hapi/joi');
-const mongoose = require('mongoose');
 const router = express.Router();
-const Schema = mongoose.Schema;
-
-const customerSchema = new Schema({
-    name:{
-        type: String,
-        required: true
-    },
-    isGold: {
-        type: Boolean,
-        default: false
-    },
-    phone: {
-        type: String,
-        required: true,
-        minlength:3,
-        maxlength:10
-    }
-});
-
-const Customer = mongoose.model('Customer', customerSchema);
+const {Customer, validate} = require('../models/customer');
 
 router.get('/', async(req,res) => {
     const customers = await Customer.find();
@@ -44,7 +23,7 @@ router.get('/:id', async(req, res) => {
 router.post('/', async(req, res) => {
     const {
         error
-    } = validateRequest(req.body);
+    } = validate(req.body);
     if (error) {
         return res.status(400).send(error);
     }
@@ -65,7 +44,7 @@ router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const {
         error
-    } = validateRequest(req.body);
+    } = validate(req.body);
     if (error) {
         return res.status(400).send(error);
     }
@@ -98,14 +77,5 @@ router.delete('/:id', async(req, res) => {
 });
 
 
-function validateRequest(genre) {
-    const schema = Joi.object().keys({
-        name: Joi.string().min(3).required(),
-        phone: Joi.string().min(3).required(),
-        isGold: Joi.boolean()
-    });
-
-    return Joi.validate(genre, schema);
-}
 
 module.exports = router;
