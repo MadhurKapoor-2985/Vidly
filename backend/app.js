@@ -6,6 +6,7 @@ const genreRouter = require('./routes/genres');
 const customerRouter = require('./routes/customers');
 const movieRouter = require('./routes/movies');
 const rentalRouter = require('./routes/rentals');
+const userRouter = require('./routes/users');
 
 mongoose.connect('mongodb://localhost/Vidly')
     .then(() => console.log('Connected to MongoDB database'))
@@ -18,6 +19,7 @@ app.use('/api/genres/', genreRouter);
 app.use('/api/customers', customerRouter);
 app.use('/api/movies', movieRouter);
 app.use('/api/rentals', rentalRouter);
+app.use('/api/users/', userRouter);
 
 const PORT = process.env.PORT || 3000;
 
