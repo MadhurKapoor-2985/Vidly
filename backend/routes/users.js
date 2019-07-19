@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {User, validate} = require('../models/user');
+const _ = require('lodash');
 
 router.post('/', async (req, res) => {
     const {
@@ -22,7 +23,7 @@ router.post('/', async (req, res) => {
 
     user = await user.save();
 
-    res.send(user);
+    res.send(_.pick(user,[name,email]));
 });
 
 module.exports = router;
