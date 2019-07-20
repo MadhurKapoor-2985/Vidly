@@ -4,6 +4,7 @@ const {User} = require('../models/user');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const Joi = require('@hapi/joi');
+const jwt = require('jsonwebtoken');
 
 router.post('/', async (req, res) => {
     const {
@@ -21,7 +22,9 @@ router.post('/', async (req, res) => {
 
     if(!checkPassword) return res.status(400).send('Invalid Email or password');
 
-    res.send(true);
+    const token = jwt.sign({_id: user._id}, "jwtPrivateKey");
+
+    res.send(token);
 
 });
 
