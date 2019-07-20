@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {Movie, validate} = require('../models/movie');
 const {Genre} = require('../models/genre');
+const auth = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
     const movies = await Movie.find({});
@@ -22,7 +23,7 @@ router.get('/:id', async(req, res) => {
 
 });
 
-router.post('/', async(req, res) => {
+router.post('/', auth, async(req, res) => {
 
     const {
         error
@@ -53,7 +54,7 @@ router.post('/', async(req, res) => {
 
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
     const {
         error
@@ -89,7 +90,7 @@ router.put('/:id', async (req, res) => {
 
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     const id = req.params.id;
 
     const movie = await Movie.findByIdAndDelete(id);
